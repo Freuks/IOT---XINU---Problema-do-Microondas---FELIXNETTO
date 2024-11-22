@@ -1,44 +1,42 @@
-#include <stdio.h>
-#include <time.h>
-#include <unistd.h>
-#include <string.h>
+#include <xinu.h>
 
 void cronometro() {
-    time_t tempo;
-    struct tm *tempoinfo;
-
-    time(&tempo);
-    tempoinfo = localtime(&tempo);
-
+    uint32 start_time = gettime();
+    
     while (1) {
-        time(&tempo);
-        tempoinfo = localtime(&tempo);
-        printf("%02d:%02d:%02d\n", tempoinfo->tm_hour, tempoinfo->tm_min, tempoinfo->tm_sec);
+        uint32 current_time = gettime();
+        uint32 elapsed_time = current_time - start_time;
+
+        int horas = elapsed_time / 3600;
+        int minutos = (elapsed_time % 3600) / 60;
+        int segundos = elapsed_time % 60;
+
+        kprintf("%02d:%02d:%02d\n", horas, minutos, segundos);
         sleep(1);
     }
 }
 
-int main() {
+process main() {
     char opcao[4];
 
-    printf("Ligar micro-ondas na tomada? (s/n): ");
-    fgets(opcao, sizeof(opcao), stdin);
+    kprintf("Ligar micro-ondas na tomada? (s/n): ");
+    read(0, opcao, sizeof(opcao));
     opcao[strcspn(opcao, "\n")] = 0;
 
-    if (strcmp(opcao, "s") == 0 || strcmp(opcao, "SIM") == 0) {
-        printf("Micro-ondas ligado.\n");
-        printf("Deseja usar o micro-ondas? (s/n): ");
-        fgets(opcao, sizeof(opcao), stdin);
+    if (strcmp(opcao, "s") == 0 || strcmp(opcao, "s") == 0) {
+        kprintf("Micro-ondas ligado.\n");
+        kprintf("Deseja usar o micro-ondas? (s/n): ");
+        read(0, opcao, sizeof(opcao));
         opcao[strcspn(opcao, "\n")] = 0;
 
         if (strcmp(opcao, "n") == 0 || strcmp(opcao, "n") == 0) {
-            printf("Micro-ondas nao em uso. Iniciando cronometro...\n");
+            kprintf("Micro-ondas nao em uso. Iniciando cronometro...\n");
             cronometro();
         } else {
-            printf("Micro-ondas em funcionamento...\n");
+            kprintf("Micro-ondas em funcionamento...\n");
         }
     } else {
-        printf("Micro-ondas nao ligado.\n");
+        kprintf("Micro-ondas nao ligado.\n");
     }
 
     return 0;
