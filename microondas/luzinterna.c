@@ -9,9 +9,10 @@ process main(void) {
         if (n > 0) {
             inputBuffer[n] = '\0';
             buttonState = inputBuffer[0] - '0';
-            if (buttonState == 1) {
+
+            if (inputBuffer[0] == '1') {
                 kprintf("Porta aberta: 1\n");
-            } else if (buttonState == 0) {
+            } else if (inputBuffer[0] == '0') {
                 kprintf("Porta fechada: 0\n");
             } else {
                 kprintf("VOCE DESTRUIU O MICROONDAS, pressione 1 ou 0.\n");
