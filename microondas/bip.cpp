@@ -4,7 +4,7 @@ void beep() {
     kprintf("\a");
 }
 
-process main(void) {
+shellcmd xsh_timer(int nargs, char *args[]) {
     int timer;
     char inputBuffer[10];
 
